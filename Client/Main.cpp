@@ -103,15 +103,9 @@ int main()
 
 	/////////////////////////////
 
-	const char Message[] = "give me message.";
+	//const char Message[] = "give me message.";
 
-	int SendBytes = send(ServerSocket, Message, strlen(Message) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
-
-	if (SendBytes <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
+	
 
 
 
@@ -131,6 +125,13 @@ int main()
 	cout << "서버로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
 	cout << "서버로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
 
+	int SendBytes = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
+
+	if (SendBytes <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
 	
 	/////////////////////////////
 

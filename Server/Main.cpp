@@ -123,6 +123,17 @@ int main()
 
 	/////////////////
 	
+	const char Message[] = "show me the money.";
+
+	// 7. 보내기
+	int SendBytes = send(ClientSocket, Message, strlen(Message) + 1, 0);
+
+	if (SendBytes <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
+
 	char Buffer[1024] = {0,};
 
 	// 8. 받기
@@ -141,16 +152,7 @@ int main()
 	cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
 
 
-	//const char Message[] = "HelloWorld";
-
-	// 7. 보내기
-	int SendBytes = send(ClientSocket, Buffer, strlen(Buffer) + 1, 0);
-
-	if (SendBytes <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
+	
 
 	/////////////////
 
