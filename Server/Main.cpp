@@ -9,6 +9,12 @@
 
 using namespace std;
 
+struct Data
+{
+	int Number1;
+	int Number2;
+};
+
 // Server 
 void SocketInit()
 {
@@ -125,17 +131,12 @@ int main()
 	// 6. 클라 소켓 생성
 	SOCKET ClientSocket = ClientSocketAccept(ServerSocket, ClientAddrIn, ClientAddrLength);
 
-
 	/////////////////
-	
-	//const char Message[] = "show me the money.";
 
-	int Number1 = 0;
-	int Number2 = 0;
-	char Buffer[1024] = { 0, };
+	Data Number;
 
 	// 8. 받기
-	int RecvBytes = recv(ClientSocket, Buffer, sizeof(Buffer) - 1, 0); 
+	int RecvBytes = recv(ClientSocket, (char*)&Number, sizeof(Number), 0);
 
 	if (RecvBytes <= 0)
 	{
@@ -143,31 +144,15 @@ int main()
 		//exit(-1);
 	}
 
-	Number1 = atoi(Buffer);
-
-	cout << "클라로 받은 메세지 : " << Buffer << endl;
+	cout << "클라로 받은 메세지 : " << Number.Number1 << endl;
+	cout << "클라로 받은 메세지 : " << Number.Number2 << endl;
 	cout << "클라로 받은 바이트 : " << RecvBytes << endl;
 
-	// 8. 받기
-	int RecvBytes2 = recv(ClientSocket, Buffer, sizeof(Buffer) - 1, 0);
-
-	if (RecvBytes2 <= 0)
-	{
-		cout << "RecvBytes error" << GetLastError() << endl;
-		//exit(-1);
-	}
-
-	cout << "클라로 받은 메세지 : " << Buffer << endl;
-	cout << "클라로 받은 바이트 : " << RecvBytes << endl;
-
-	Number2 = atoi(Buffer);
-
-	int Number3 = Number1 + Number2;
-	char Answer[1024] = { 0, };
-	_itoa(Number3, Answer, 10);
-
+	Data SendData;
+	SendData.Number1 = Number.Number1 + Number.Number2;
+	SendData.Number2 = Number.Number1 * Number.Number2;
 	// 7. 보내기
-	int SendBytes = send(ClientSocket, Answer, strlen(Answer) + 1, 0);
+	int SendBytes = send(ClientSocket, (char*)&SendData, sizeof(SendData), 0);
 
 	if (SendBytes <= 0)
 	{
@@ -175,14 +160,9 @@ int main()
 		//exit(-1);
 	}
 
-	cout << "클라로 보낼 메세지 : " << Answer << endl;
+	cout << "클라로 보낼 메세지 : " << SendData.Number1 << endl;
+	cout << "클라로 보낼 메세지 : " << SendData.Number2 << endl;
 	cout << "클라로 보낼 바이트 : " << SendBytes << endl;
-
-	//cout << "클라이언트로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
-	//cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
-
-
-	
 
 	/////////////////
 

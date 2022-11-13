@@ -8,6 +8,12 @@
 
 using namespace std;
 
+struct Data
+{
+	int Number1;
+	int Number2;
+};
+
 // Client 
 void SocketInit()
 {
@@ -101,22 +107,14 @@ int main()
 	// 3. 서버 연결
 	SocketConnect(ServerSocket, ServerSockAddr);
 
-
 	/////////////////////////////
 
-	//const char Message[] = "give me message.";
+	Data Number;
 
-	
-	int Number1 = 0;
-	int Number2 = 0;
-	char Buffer[1024] = { 0, };
+	Number.Number1 = 10;
+	Number.Number2 = 20;
 
-	cin >> Number1;
-	cin >> Number2;
-
-	_itoa(Number1, Buffer, 10);
-
-	int SendBytes = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
+	int SendBytes = send(ServerSocket, (char*)&Number, sizeof(Number), 0); //strlen(Message) + 1 널문자 하나 추가
 
 	if (SendBytes <= 0)
 	{
@@ -126,18 +124,9 @@ int main()
 
 	cout << "SendBytes : " << SendBytes << endl;
 
-	_itoa(Number2, Buffer, 10);
+	Data Result;
 
-	int SendBytes2 = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
-
-	if (SendBytes2 <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
-	cout << "SendBytes2 : " << SendBytes << endl;
-
-	int RecvBytes = recv(ServerSocket, Buffer, sizeof(Buffer) - 1, 0); //sizeof(Buffer) 원 사이즈로 받음 
+	int RecvBytes = recv(ServerSocket, (char*)&Result, sizeof(Result), 0); //sizeof(Buffer) 원 사이즈로 받음 
 
 	if (RecvBytes <= 0)
 	{
@@ -145,16 +134,10 @@ int main()
 		exit(-1);
 	}
 
-
-	cout << "서버로 받은 메세지 : " << Buffer << endl;
+	cout << "서버로 받은 메세지 : " << Result.Number1 << endl;
+	cout << "서버로 받은 메세지 : " << Result.Number2 << endl;
 	cout << "서버로 받은 바이트 : " << RecvBytes << endl;
 
-	
-	//cout << "서버로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
-	//cout << "서버로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
-
-	
-	
 	/////////////////////////////
 
 
