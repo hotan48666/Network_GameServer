@@ -8,21 +8,22 @@
 using namespace std;
 
 // Server 
-
-int main()
+void SocketInit()
 {
 	//초기화
 	WSAData wsaData;
-	int Result = WSAStartup(MAKEWORD(2 ,2), &wsaData);
-	
+	int Result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+
 	//에러처리
 	if (Result > 0)
 	{
 		cout << "Socket init error" << GetLastError() << endl;
 		exit(-1);
 	}
+}
 
-	//생성
+SOCKET CreateServerSocket()
+{
 	SOCKET ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 
 	//에러처리
@@ -32,15 +33,38 @@ int main()
 		exit(-1);
 	}
 
-	//주소 구조체 정보 생성
-	SOCKADDR_IN ServerSockAddr;
-	memset(&ServerSockAddr, 0, sizeof(SOCKADDR_IN));//초기화
+	return ServerSocket;
+}
 
-	ServerSockAddr.sin_family = PF_INET;
-	ServerSockAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-	ServerSockAddr.sin_port = htons(12345);
-	
-	//바인딩
+SOCKADDR_IN CreateSockAddr(string type)
+{
+
+	SOCKADDR_IN SockAddr;
+
+	if (type == "Server")
+	{
+		memset(&SockAddr, 0, sizeof(SOCKADDR_IN));//초기화
+
+		SockAddr.sin_family = PF_INET;
+		SockAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+		SockAddr.sin_port = htons(12345);
+	}
+	else if (type == "Client")
+	{
+		memset(&SockAddr, 0, sizeof(SOCKADDR_IN));
+	}
+	else
+	{
+		cout << "Socket type error" << GetLastError() << endl;
+		exit(-1);
+	}
+
+	return SockAddr;
+}
+
+void SocketBind(SOCKET ServerSocket, SOCKADDR_IN ServerSockAddr)
+{
+	// 4. 바인딩
 	int Status = bind(ServerSocket, (SOCKADDR*)&ServerSockAddr, sizeof(ServerSockAddr));
 
 	//에러처리
@@ -49,9 +73,12 @@ int main()
 		cout << "Socket bind error" << GetLastError() << endl;
 		exit(-1);
 	}
+}
 
+void SocketListen(SOCKET ServerSocket)
+{
 	//대기
-	Status = listen(ServerSocket, 0);
+	int Status = listen(ServerSocket, 0);
 
 	//에러처리
 	if (Status == SOCKET_ERROR)
@@ -59,15 +86,10 @@ int main()
 		cout << "Socket listen error" << GetLastError() << endl;
 		exit(-1);
 	}
+}
 
-	cout << "Socket 대기중" << endl;
-
-	//주소 구조체 정보 생성
-	SOCKADDR_IN ClientAddrIn;
-	memset(&ClientAddrIn, 0, sizeof(SOCKADDR_IN));
-	int ClientAddrLength = sizeof(ClientAddrIn);
-
-	//소켓 생성
+SOCKET ClientSocketAccept(SOCKET ServerSocket, SOCKADDR_IN ClientAddrIn, int ClientAddrLength)
+{
 	SOCKET ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientAddrIn, &ClientAddrLength);
 
 	//에러처리
@@ -77,9 +99,34 @@ int main()
 		exit(-1);
 	}
 
+	return ClientSocket;
+}
+
+int main()
+{
+	// 1. 초기화
+	SocketInit();
+	// 2. 서버 소켓 생성
+	SOCKET ServerSocket = CreateServerSocket();
+	// 서버 주소 구조체 정보 생성
+	SOCKADDR_IN ServerSockAddr = CreateSockAddr("Server");
+	// 4. 바인딩
+	SocketBind(ServerSocket, ServerSockAddr);
+	// 5. 대기
+	SocketListen(ServerSocket);
+
+	// 클라 주소 구조체 정보 생성
+	SOCKADDR_IN ClientAddrIn = CreateSockAddr("Client");
+	int ClientAddrLength = sizeof(ClientAddrIn);
+	// 6. 클라 소켓 생성
+	SOCKET ClientSocket = ClientSocketAccept(ServerSocket, ClientAddrIn, ClientAddrLength);
+
+	/////////////////
+
+
 	const char Message[] = "HelloWorld";
 	
-	//보내기
+	// 7. 보내기
 	int SendBytes = send(ClientSocket, Message, strlen(Message) + 1, 0);
 
 	if (SendBytes <= 0)
@@ -90,7 +137,7 @@ int main()
 
 	char Buffer[1024] = {0,};
 
-	//받기
+	// 8. 받기
 	int RecvBytes = recv(ClientSocket, Buffer, sizeof(Buffer), 0);
 
 	if (RecvBytes <= 0)
@@ -105,6 +152,7 @@ int main()
 	cout << "클라이언트로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
 	cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
 
+	/////////////////
 
 	closesocket(ClientSocket);
 	closesocket(ServerSocket);

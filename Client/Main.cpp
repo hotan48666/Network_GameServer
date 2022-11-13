@@ -8,8 +8,7 @@
 using namespace std;
 
 // Client 
-
-int main()
+void SocketInit()
 {
 	//초기화
 	WSAData wsaData;
@@ -21,8 +20,10 @@ int main()
 		cout << "Socket init error" << GetLastError() << endl;
 		exit(-1);
 	}
+}
 
-	//생성
+SOCKET CreateServerSocket()
+{
 	SOCKET ServerSocket = socket(AF_INET, SOCK_STREAM, 0);
 
 	//에러처리
@@ -32,21 +33,76 @@ int main()
 		exit(-1);
 	}
 
-	//주소 구조체 정보 생성
-	SOCKADDR_IN ServerSockAddr;
-	memset(&ServerSockAddr, 0, sizeof(SOCKADDR_IN));//초기화
+	return ServerSocket;
+}
 
-	ServerSockAddr.sin_family = PF_INET;
-	ServerSockAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
-	ServerSockAddr.sin_port = htons(12345);
+SOCKADDR_IN CreateSockAddr(string type)
+{
 
+	SOCKADDR_IN SockAddr;
+
+	if (type == "Server")
+	{
+		memset(&SockAddr, 0, sizeof(SOCKADDR_IN));//초기화
+
+		SockAddr.sin_family = PF_INET;
+		SockAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+		SockAddr.sin_port = htons(12345);
+	}
+	else if (type == "Client")
+	{
+		memset(&SockAddr, 0, sizeof(SOCKADDR_IN));
+	}
+	else
+	{
+		cout << "Socket type error" << GetLastError() << endl;
+		exit(-1);
+	}
+
+	return SockAddr;
+}
+
+void SocketConnect(SOCKET ServerSocket, SOCKADDR_IN ServerSockAddr)
+{
+	// 3. 서버 연결
 	int Status = connect(ServerSocket, (SOCKADDR*)&ServerSockAddr, sizeof(ServerSockAddr));
 
+	//에러처리
 	if (Status == SOCKET_ERROR)
 	{
 		cout << "ServerSocket connect error" << GetLastError() << endl;
 		exit(-1);
 	}
+}
+
+SOCKET ClientSocketAccept(SOCKET ServerSocket, SOCKADDR_IN ClientAddrIn, int ClientAddrLength)
+{
+	SOCKET ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientAddrIn, &ClientAddrLength);
+
+	//에러처리
+	if (ClientSocket == INVALID_SOCKET)
+	{
+		cout << "ClientSocket make error" << GetLastError() << endl;
+		exit(-1);
+	}
+
+	return ClientSocket;
+}
+
+int main()
+{
+	// 1. 초기화
+	SocketInit();
+	// 2. 서버 소켓 생성
+	SOCKET ServerSocket = CreateServerSocket();
+	//주소 구조체 정보 생성
+	SOCKADDR_IN ServerSockAddr = CreateSockAddr("Server");
+	// 3. 서버 연결
+	SocketConnect(ServerSocket, ServerSockAddr);
+
+
+	/////////////////////////////
+
 
 	char Buffer[1024] = {0,};
 
@@ -72,6 +128,7 @@ int main()
 		exit(-1);
 	}
 
+	/////////////////////////////
 
 
 	closesocket(ServerSocket);
