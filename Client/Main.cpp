@@ -111,8 +111,8 @@ int main()
 
 	Data Number;
 
-	Number.Number1 = 10;
-	Number.Number2 = 20;
+	Number.Number1 = htonl(10);
+	Number.Number2 = htonl(20);
 
 	int SendBytes = send(ServerSocket, (char*)&Number, sizeof(Number), 0); //strlen(Message) + 1 널문자 하나 추가
 
@@ -134,8 +134,8 @@ int main()
 		exit(-1);
 	}
 
-	cout << "서버로 받은 메세지 : " << Result.Number1 << endl;
-	cout << "서버로 받은 메세지 : " << Result.Number2 << endl;
+	cout << "서버로 받은 메세지 : " << ntohl(Result.Number1) << endl;
+	cout << "서버로 받은 메세지 : " << ntohl(Result.Number2) << endl;
 	cout << "서버로 받은 바이트 : " << RecvBytes << endl;
 
 	/////////////////////////////

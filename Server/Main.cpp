@@ -144,13 +144,13 @@ int main()
 		//exit(-1);
 	}
 
-	cout << "클라로 받은 메세지 : " << Number.Number1 << endl;
-	cout << "클라로 받은 메세지 : " << Number.Number2 << endl;
+	cout << "클라로 받은 메세지 : " << ntohl(Number.Number1) << endl;
+	cout << "클라로 받은 메세지 : " << ntohl(Number.Number2) << endl;
 	cout << "클라로 받은 바이트 : " << RecvBytes << endl;
 
 	Data SendData;
-	SendData.Number1 = Number.Number1 + Number.Number2;
-	SendData.Number2 = Number.Number1 * Number.Number2;
+	SendData.Number1 = htonl(ntohl(Number.Number1) + ntohl(Number.Number2));
+	SendData.Number2 = htonl(ntohl(Number.Number1) * ntohl(Number.Number2));
 	// 7. 보내기
 	int SendBytes = send(ClientSocket, (char*)&SendData, sizeof(SendData), 0);
 
@@ -160,8 +160,8 @@ int main()
 		//exit(-1);
 	}
 
-	cout << "클라로 보낼 메세지 : " << SendData.Number1 << endl;
-	cout << "클라로 보낼 메세지 : " << SendData.Number2 << endl;
+	cout << "클라로 보낼 메세지 : " << ntohl(SendData.Number1) << endl;
+	cout << "클라로 보낼 메세지 : " << ntohl(SendData.Number2) << endl;
 	cout << "클라로 보낼 바이트 : " << SendBytes << endl;
 
 	/////////////////
