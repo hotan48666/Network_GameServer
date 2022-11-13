@@ -114,15 +114,15 @@ int main()
 	SocketBind(ServerSocket, ServerSockAddr);
 	// 5. 대기
 	SocketListen(ServerSocket);
-
 	// 클라 주소 구조체 정보 생성
 	SOCKADDR_IN ClientAddrIn = CreateSockAddr("Client");
 	int ClientAddrLength = sizeof(ClientAddrIn);
 	// 6. 클라 소켓 생성
 	SOCKET ClientSocket = ClientSocketAccept(ServerSocket, ClientAddrIn, ClientAddrLength);
 
-	/////////////////
 
+	/////////////////
+	
 
 	const char Message[] = "HelloWorld";
 	

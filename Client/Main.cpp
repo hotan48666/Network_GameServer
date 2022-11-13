@@ -46,7 +46,7 @@ SOCKADDR_IN CreateSockAddr(string type)
 		memset(&SockAddr, 0, sizeof(SOCKADDR_IN));//초기화
 
 		SockAddr.sin_family = PF_INET;
-		SockAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+		SockAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 		SockAddr.sin_port = htons(12345);
 	}
 	else if (type == "Client")
