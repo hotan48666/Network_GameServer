@@ -47,7 +47,7 @@ SOCKADDR_IN CreateSockAddr(string type)
 
 		SockAddr.sin_family = PF_INET;
 		SockAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-		SockAddr.sin_port = htons(12345);
+		SockAddr.sin_port = htons(5001);
 	}
 	else if (type == "Client")
 	{
@@ -123,18 +123,6 @@ int main()
 
 	/////////////////
 	
-
-	const char Message[] = "HelloWorld";
-	
-	// 7. 보내기
-	int SendBytes = send(ClientSocket, Message, strlen(Message) + 1, 0);
-
-	if (SendBytes <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
-
 	char Buffer[1024] = {0,};
 
 	// 8. 받기
@@ -151,6 +139,18 @@ int main()
 
 	cout << "클라이언트로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
 	cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
+
+
+	//const char Message[] = "HelloWorld";
+
+	// 7. 보내기
+	int SendBytes = send(ClientSocket, Buffer, strlen(Buffer) + 1, 0);
+
+	if (SendBytes <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
 
 	/////////////////
 

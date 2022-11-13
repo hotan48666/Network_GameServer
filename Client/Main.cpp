@@ -47,7 +47,7 @@ SOCKADDR_IN CreateSockAddr(string type)
 
 		SockAddr.sin_family = PF_INET;
 		SockAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
-		SockAddr.sin_port = htons(12345);
+		SockAddr.sin_port = htons(5001);
 	}
 	else if (type == "Client")
 	{
@@ -103,10 +103,21 @@ int main()
 
 	/////////////////////////////
 
+	const char Message[] = "give me message.";
 
-	char Buffer[1024] = {0,};
+	int SendBytes = send(ServerSocket, Message, strlen(Message) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
 
-	int RecvBytes = recv(ServerSocket, Buffer, sizeof(Buffer), 0);
+	if (SendBytes <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
+
+
+
+	char Buffer[1024] = { 0, };
+
+	int RecvBytes = recv(ServerSocket, Buffer, sizeof(Buffer), 0); //sizeof(Buffer) 원 사이즈로 받음 
 
 	if (RecvBytes <= 0)
 	{
@@ -120,14 +131,7 @@ int main()
 	cout << "서버로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
 	cout << "서버로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
 
-	int SendBytes = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0);
-
-	if (SendBytes <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
-
+	
 	/////////////////////////////
 
 
