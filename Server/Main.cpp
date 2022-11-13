@@ -1,4 +1,6 @@
 ﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+
 
 #include<iostream>
 #include<WinSock2.h>
@@ -114,6 +116,9 @@ int main()
 	SocketBind(ServerSocket, ServerSockAddr);
 	// 5. 대기
 	SocketListen(ServerSocket);
+
+	cout << "대기중 "  << endl;
+
 	// 클라 주소 구조체 정보 생성
 	SOCKADDR_IN ClientAddrIn = CreateSockAddr("Client");
 	int ClientAddrLength = sizeof(ClientAddrIn);
@@ -123,33 +128,58 @@ int main()
 
 	/////////////////
 	
-	const char Message[] = "show me the money.";
+	//const char Message[] = "show me the money.";
 
-	// 7. 보내기
-	int SendBytes = send(ClientSocket, Message, strlen(Message) + 1, 0);
-
-	if (SendBytes <= 0)
-	{
-		cout << "SendBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
-
-	char Buffer[1024] = {0,};
+	int Number1 = 0;
+	int Number2 = 0;
+	char Buffer[1024] = { 0, };
 
 	// 8. 받기
-	int RecvBytes = recv(ClientSocket, Buffer, sizeof(Buffer), 0);
+	int RecvBytes = recv(ClientSocket, Buffer, sizeof(Buffer) - 1, 0); 
 
 	if (RecvBytes <= 0)
 	{
 		cout << "RecvBytes error" << GetLastError() << endl;
-		exit(-1);
+		//exit(-1);
 	}
 
-	cout << "클라이언트로 받은 메세지 : " << Buffer << endl;
-	cout << "클라이언트로 받은 바이트 : " << RecvBytes << endl;
+	Number1 = atoi(Buffer);
 
-	cout << "클라이언트로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
-	cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
+	cout << "클라로 받은 메세지 : " << Buffer << endl;
+	cout << "클라로 받은 바이트 : " << RecvBytes << endl;
+
+	// 8. 받기
+	int RecvBytes2 = recv(ClientSocket, Buffer, sizeof(Buffer) - 1, 0);
+
+	if (RecvBytes2 <= 0)
+	{
+		cout << "RecvBytes error" << GetLastError() << endl;
+		//exit(-1);
+	}
+
+	cout << "클라로 받은 메세지 : " << Buffer << endl;
+	cout << "클라로 받은 바이트 : " << RecvBytes << endl;
+
+	Number2 = atoi(Buffer);
+
+	int Number3 = Number1 + Number2;
+	char Answer[1024] = { 0, };
+	_itoa(Number3, Answer, 10);
+
+	// 7. 보내기
+	int SendBytes = send(ClientSocket, Answer, strlen(Answer) + 1, 0);
+
+	if (SendBytes <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		//exit(-1);
+	}
+
+	cout << "클라로 보낼 메세지 : " << Answer << endl;
+	cout << "클라로 보낼 바이트 : " << SendBytes << endl;
+
+	//cout << "클라이언트로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
+	//cout << "클라이언트로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
 
 
 	

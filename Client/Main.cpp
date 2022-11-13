@@ -1,4 +1,5 @@
 ﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include<iostream>
 #include<WinSock2.h>
@@ -106,24 +107,14 @@ int main()
 	//const char Message[] = "give me message.";
 
 	
-
-
-
+	int Number1 = 0;
+	int Number2 = 0;
 	char Buffer[1024] = { 0, };
 
-	int RecvBytes = recv(ServerSocket, Buffer, sizeof(Buffer), 0); //sizeof(Buffer) 원 사이즈로 받음 
+	cin >> Number1;
+	cin >> Number2;
 
-	if (RecvBytes <= 0)
-	{
-		cout << "RecvBytes error" << GetLastError() << endl;
-		exit(-1);
-	}
-
-	cout << "서버로 받은 메세지 : " << Buffer << endl;
-	cout << "서버로 받은 바이트 : " << RecvBytes << endl;
-
-	cout << "서버로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
-	cout << "서버로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
+	_itoa(Number1, Buffer, 10);
 
 	int SendBytes = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
 
@@ -132,6 +123,37 @@ int main()
 		cout << "SendBytes error" << GetLastError() << endl;
 		exit(-1);
 	}
+
+	cout << "SendBytes : " << SendBytes << endl;
+
+	_itoa(Number2, Buffer, 10);
+
+	int SendBytes2 = send(ServerSocket, Buffer, strlen(Buffer) + 1, 0); //strlen(Message) + 1 널문자 하나 추가
+
+	if (SendBytes2 <= 0)
+	{
+		cout << "SendBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
+	cout << "SendBytes2 : " << SendBytes << endl;
+
+	int RecvBytes = recv(ServerSocket, Buffer, sizeof(Buffer) - 1, 0); //sizeof(Buffer) 원 사이즈로 받음 
+
+	if (RecvBytes <= 0)
+	{
+		cout << "RecvBytes error" << GetLastError() << endl;
+		exit(-1);
+	}
+
+
+	cout << "서버로 받은 메세지 : " << Buffer << endl;
+	cout << "서버로 받은 바이트 : " << RecvBytes << endl;
+
+	
+	//cout << "서버로 받은 sizeof(Buffer) : " << sizeof(Buffer) << endl;
+	//cout << "서버로 받은 strlen(Buffer) : " << strlen(Buffer) << endl;
+
+	
 	
 	/////////////////////////////
 
