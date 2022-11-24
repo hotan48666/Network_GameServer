@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{97cdb72b-4e2a-4f5c-8f45-da137a2f4c28}</ProjectGuid>
-    <RootNamespace>Client</RootNamespace>
+    <ProjectGuid>{fda13ca0-0c78-47b4-a398-3412babc71f2}</ProjectGuid>
+    <RootNamespace>ServerEx</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,18 +70,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -139,18 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TcpServer.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MessagePacket.cpp" />
-    <ClCompile Include="SelectTcpClient_th.cpp" />
-    <ClCompile Include="TestGameClient.cpp" />
-    <ClCompile Include="UDPFileClient.cpp" />
-    <ClCompile Include="UDPFileClient_th.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MessagePacket.h" />
-    <ClInclude Include="PlayerData.h" />
-    <ClInclude Include="SelectTcpClient_th.h" />
-    <ClInclude Include="TestGameClient.h" />
+    <ClInclude Include="TcpServer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

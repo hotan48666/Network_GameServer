@@ -140,6 +140,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MessagePacket.cpp" />
+    <ClCompile Include="SelectTcpServer.cpp" />
+    <ClCompile Include="SelectTcpServer_th.cpp" />
+    <ClCompile Include="TestGameServer.cpp" />
+    <ClCompile Include="ThreadMultplexingServer_th.cpp" />
+    <ClCompile Include="UDPFileServer.cpp" />
+    <ClCompile Include="UDPFileServer_th.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MessagePacket.h" />
+    <ClInclude Include="PlayerData.h" />
+    <ClInclude Include="SelectTcpServer.h" />
+    <ClInclude Include="SelectTcpServer_th.h" />
+    <ClInclude Include="TestGameServer.h" />
+    <ClInclude Include="ThreadMultplexingServer_th.h" />
+    <ClInclude Include="UDPFileServer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,15 @@
-﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS
+﻿#include"TestGameServer.h"
+
+/*
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 
 
 #include<iostream>
 #include<WinSock2.h>
+#include"UDPFileServer.h"
+
 
 #pragma comment(lib, "WS2_32.lib")
 
@@ -110,7 +116,7 @@ SOCKET ClientSocketAccept(SOCKET ServerSocket, SOCKADDR_IN ClientAddrIn, int Cli
 	return ClientSocket;
 }
 
-int main()
+void SocketServer()
 {
 	// 1. 초기화
 	SocketInit();
@@ -123,7 +129,7 @@ int main()
 	// 5. 대기
 	SocketListen(ServerSocket);
 
-	cout << "대기중 "  << endl;
+	cout << "대기중 " << endl;
 
 	// 클라 주소 구조체 정보 생성
 	SOCKADDR_IN ClientAddrIn = CreateSockAddr("Client");
@@ -171,5 +177,13 @@ int main()
 	WSACleanup();
 
 	cout << "Server" << endl;
+}
+*/
+
+int main()
+{
+	//UDPFileServer_Main();
+	TestGameServer();
 	return 0;
 }
+

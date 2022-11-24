@@ -1,4 +1,8 @@
-﻿#define _WINSOCK_DEPRECATED_NO_WARNINGS
+﻿#include "TestGameClient.h"
+
+/*
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<iostream>
@@ -96,9 +100,9 @@ SOCKET ClientSocketAccept(SOCKET ServerSocket, SOCKADDR_IN ClientAddrIn, int Cli
 	return ClientSocket;
 }
 
-int main()
+void Client()
 {
-	// 1. 초기화
+// 1. 초기화
 	SocketInit();
 	// 2. 서버 소켓 생성
 	SOCKET ServerSocket = CreateServerSocket();
@@ -126,7 +130,7 @@ int main()
 
 	Data Result;
 
-	int RecvBytes = recv(ServerSocket, (char*)&Result, sizeof(Result), 0); //sizeof(Buffer) 원 사이즈로 받음 
+	int RecvBytes = recv(ServerSocket, (char*)&Result, sizeof(Result), 0); //sizeof(Buffer) 원 사이즈로 받음
 
 	if (RecvBytes <= 0)
 	{
@@ -145,5 +149,13 @@ int main()
 	WSACleanup();
 
 	cout << "Client" << endl;
+}
+*/
+
+
+int main()
+{
+	TestGameClient();
 	return 0;
 }
+
