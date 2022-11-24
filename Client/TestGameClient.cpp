@@ -32,21 +32,24 @@ void ProcessPacket(char* Packet)
 
 	switch ((MessagePacket)Code)
 	{
+
 		case MessagePacket::S2C_RegisterID:
 			PlayerData* NewPlayer = new PlayerData();
 			NewPlayer->MySocket = SendID;
 			PlayerList[SendID] = NewPlayer;
 			break;
-		case MessagePacket::Spawn:
+
+		case MessagePacket::S2C_Spawn:
 		
 			break;
-		case MessagePacket::Destroy:
+		case MessagePacket::S2C_Destroy:
 			
 			break;
 
 
-	default:
-		break;
+		default:
+			cout << "Not found code. " << Code << endl;
+			break;
 	}
 
 

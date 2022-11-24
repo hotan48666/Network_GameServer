@@ -45,6 +45,8 @@ struct Packet
 
 vector<SOCKET> UserList;
 
+map<SOCKET, PlayerData*> PlayerList;
+
 CRITICAL_SECTION ServerCS;
 
 char Data[18] = { 0,};
@@ -62,20 +64,21 @@ unsigned WINAPI WorkThread(void* Arg)
 			//disconnect
 			closesocket(ClientSocket);
 			EnterCriticalSection(&ServerCS);
-			UserList.erase(find(UserList.begin(), UserList.end(), ClientSocket));
+			PlayerList.erase(find(PlayerList.begin(), PlayerList.end(), ClientSocket));
 			LeaveCriticalSection(&ServerCS);
 			break;
 		}
 		else
 		{
-			for (int i = 0; i < UserList.size(); ++i)
+			for (auto Player : PlayerList)
+			//for (int i = 0; i < UserList.size(); ++i)
 			{
-				int SentLength = send(UserList[i], Buffer, (int)strlen(Buffer) + 1, 0);
+				int SentLength = send(Player.first, Buffer, (int)strlen(Buffer) + 1, 0);
 				if (SentLength <= 0)
 				{
 					closesocket(ClientSocket);
 					EnterCriticalSection(&ServerCS);
-					UserList.erase(find(UserList.begin(), UserList.end(), ClientSocket));
+					PlayerList.erase(find(PlayerList.begin(), PlayerList.end(), ClientSocket));
 					LeaveCriticalSection(&ServerCS);
 					break;
 				}
@@ -86,7 +89,7 @@ unsigned WINAPI WorkThread(void* Arg)
 	return 0;
 }
 
-void TestGameServer()
+void TestGameServer2()
 {
 	map<string, int> Test;
 
@@ -105,7 +108,7 @@ void TestGameServer()
 
 }
 
-void TestGameServer2()
+void TestGameServer()
 {
 	InitializeCriticalSection(&ServerCS);
 
@@ -184,7 +187,12 @@ void TestGameServer2()
 
 		cout << "connect : " << ClientSocket << endl;
 		EnterCriticalSection(&ServerCS);
-		UserList.push_back(ClientSocket);
+
+		PlayerData* NewPlayer = new PlayerData();
+		NewPlayer->MySocket = ClientSocket;
+		PlayerList[ClientSocket] = NewPlayer;
+
+		//PlayerList.push_back(ClientSocket);
 		LeaveCriticalSection(&ServerCS);
 
 		//S2C_RegisterID
